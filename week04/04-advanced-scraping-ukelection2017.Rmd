@@ -29,7 +29,7 @@ We first start Selenium server in Firefox:
 
 ```{r}
 # Start the Selenium server:
-rD <- rsDriver(browser=c("firefox"), port = 4491L)
+rD <- rsDriver(browser = c("firefox"), port = 4494L)
 driver <- rD[["client"]]
 
 # Navigate to the selected URL address
@@ -56,10 +56,10 @@ driver$switchToFrame(2)
 
 # We need to click on "Yes, I'm happy" button:
 # 1. Use a command to locate the button on the page
-accept_button <- driver$___________(using = "xpath", 
+accept_button <- driver$findElement(using = "xpath", 
                                     value = "/html/body/div/div[3]/div[3]/div/div/button[1]")
 # 2. Click on the button:
-accept_button$_____________()
+accept_button$clickElement()
 
 # Switch back to default frame
 driver$switchToFrame(NULL)
@@ -69,7 +69,7 @@ Let's assume we want to see the results of the constituency here. We can feed po
 
 ```{r}
 # 1. identify the node for input
-search_field <- driver$findElement(using = 'class name', value = '______________')
+search_field <- driver$findElement(using = 'class name', value = 'ge-lookup__input')
 
 # 2. send the post code
 search_field$sendKeysToElement(list("WC2A 2AE"))
@@ -83,14 +83,15 @@ while(driver$findElement(using = 'class name',                                  
 }                         # the while() loop runs until you get some suggestions!
 
 # 4. click "Enter"
-search_field$sendKeysToElement(list(key = "______"))
+search_field$sendKeysToElement(list(key = "enter"))
 ```
 
 Now that we have the results table displayed, we will scrape the name of constituency and the table.
 
 ```{r}
 ## get the constituency name
-const_name <- driver$findElement(using = 'class name', value = '_____________')$getElementText() 
+const_name <- driver$findElement(using = 'class name', value = 'ge-result__name')$getElementText()
+# const_name_2 <- driver$findElement("css", '.ge-result__name')$getElementText() # alternative way speifying CSS selector differently
 
 ## get the div with the result information
 res_div <- driver$findElement(using = 'class name', value = 'ge-result')
@@ -100,8 +101,11 @@ res_div <- driver$findElement(using = 'class name', value = 'ge-result')
 ## rvest and use familiar html_table() function
 ## get the html of the table, then parse it using rvest's "html_table"
 results_html <- read_html(res_div$getElementAttribute('innerHTML')[[1]])
+
 results_table <- html_table(results_html)[[1]]
 names(results_table)[c(1, 5)] <- c('tmp', 'tmp2')
+
+results_table  # to see the table
 ```
 
 The first column of the table was supposedly the party. But that information is not coming through, because it's just blank `<td>` tags. We still can extract the information by using the class information attached. 
