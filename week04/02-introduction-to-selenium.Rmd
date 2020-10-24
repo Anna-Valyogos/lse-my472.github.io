@@ -8,7 +8,7 @@ output: html_document
 Loading the Selenium package:
 
 ```{r}
-#install.packages("RSelenium") # run once to install the package on your computer
+# install.packages("RSelenium") # run once to install the package on your computer
 library("RSelenium")
 ```
 
@@ -16,7 +16,7 @@ library("RSelenium")
 Launching the driver and browser:
 
 ```{r}
-rD<- rsDriver(port = 5555L, browser=c("firefox"))
+rD<- rsDriver(port = 1115L, browser=c("firefox"))
 driver <- rD$client
 ```
 
