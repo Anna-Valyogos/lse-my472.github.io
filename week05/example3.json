@@ -1,0 +1,30 @@
+{
+  "MT": [
+    {
+      "code": "MY472",
+      "title": "Data for Data Scientists" ,
+      "description": "A course about collecting, processing, and storing data." ,
+      "units": 0.5 ,
+      "offeredThisYear": true ,
+      "regsiteredStudents": []
+    },
+    {
+      "code": "MY470" ,
+      "title" : "Computer programming" ,
+      "description" : "An introduction to programming." ,
+      "units" : 0.5 ,
+      "offeredThisYear" : true ,
+      "regsiteredStudents" : []
+    }
+  ],
+  "LT": [
+    {
+      "code": "MY459" ,
+      "title" : "Special Topics in Quantitative Analysis: Quantitative Text Analysis" ,
+      "description" : "A course about text analysis." ,
+      "units" : 0.5 ,
+      "offeredThisYear" : true ,
+      "regsiteredStudents" : []
+    }
+  ]
+}
