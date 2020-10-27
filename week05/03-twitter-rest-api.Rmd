@@ -18,17 +18,17 @@ library("tidyverse")
 First we need to authenticate. After your application has been approved, you can paste the consumer key, consumer secret, access token, and access token secret strings into the list below:
 
 ```{r}
-authentication <- list(consumer_key = "CONSUMER_KEY",
-                 consumer_secret = "CONSUMER_SECRET",
-                 access_token = "ACCESS_TOKEN",
-                 access_token_secret = "ACCESS_TOKEN_SECRET")
+authentication <- list(consumer_key = "Z5IKectiIqZcq9cJVXvJMQ5ND",
+                 consumer_secret = "mCliCAGhuMB4pLNbICafDMqTv9Ntmv7XuuBkJmgkLljSrRtpRL",
+                 access_token = "1320776729556885504-JsNFPwhmZexBnVS8ndQmZWSzrinHzt",
+                 access_token_secret = "rXV2lGcVfXVFaV3vOxyy7r9Zrg3cM4utsox7UIVUyKEkz")
 ```
 
 Lastly, enter your app name into the cell below. If the cell then outputs `LSEnews` after running, we are good to go:
 
 ```{r}
 # Replace the app name with your own!
-twitter_token <- create_token(app = "enter your app name here", 
+twitter_token <- create_token(app = "MY472 - API practice", 
                               consumer_key = authentication$consumer_key,
                               consumer_secret = authentication$consumer_secret,
                               access_token = authentication$access_token,
@@ -51,7 +51,6 @@ head(tweets)
 What are the most popular hashtags?
 
 ```{r}
-
 ht <- str_extract_all(tweets$text, "#[A-Za-z0-9_]+")
 ht <- unlist(ht)
 head(sort(table(ht), decreasing = TRUE))
