@@ -22,10 +22,10 @@ library("maps")
 First, we need to authenticate. After your application has been approved, you can paste the consumer key, consumer secret, access token, and access token secret strings into the list below:
 
 ```{r}
-authentication <- list(consumer_key = "CONSUMER_KEY",
-                 consumer_secret = "CONSUMER_SECRET",
-                 access_token = "ACCESS_TOKEN",
-                 access_token_secret = "ACCESS_TOKEN_SECRET")
+authentication <- list(consumer_key = "Z5IKectiIqZcq9cJVXvJMQ5ND",
+                 consumer_secret = "mCliCAGhuMB4pLNbICafDMqTv9Ntmv7XuuBkJmgkLljSrRtpRL",
+                 access_token = "1320776729556885504-NlaryhgxxYaJW1KCzXVJHAoppuJpxR",
+                 access_token_secret = "i7unrCU1FSn1jKD33vRKhqLeCqBTxrms3xmMJ9u4ZzDdi")
 ```
 
 A more convenient approach could be to store this list once after you have pasted your keys and then to reload it when running some code. Store the list once with:
@@ -73,7 +73,7 @@ Note in particular that while the function is running, all output is written int
 First, we collect a random sample of tweets for 30 seconds and store it in an R object. Check your current folder to see how a JSON file is created and then deleted once the function finished and the output was assigned to the tweets object:
 
 ```{r}
-sample_tweets <- stream_tweets(q = ____, timeout = 30)
+sample_tweets <- stream_tweets(q = "", timeout = 30)
 head(sample_tweets)
 head(sample_tweets$text)
 ```
@@ -83,6 +83,7 @@ The returned tweets have been parsed into R directly as a data frame / tibble:
 ```{r}
 class(sample_tweets)
 sample_tweets
+# already a neat data frame - thanks to Pablo who built this package
 ```
 
 Who tweeted the most retweeted tweet, what text does it contain, and what is its retweet count?
@@ -96,7 +97,7 @@ max(sample_tweets$retweet_count) # if the stream duration was short, no tweet mi
 What are the most popular hashtags at the moment? We will use regular expressions to extract hashtags:
 
 ```{r}
-ht <- str_extract_all(sample_tweets$text, "#[A-Za-z0-9_]+")
+ht <- str_extract_all(sample_tweets$text, "#[A-Za-z0-9_]+") # regex looks for a hash symbol and whatever capital letter, whatever smaller case letter and whatever number, underscore comes after it (in any amount) in a sequence - in any order, and + means in any length 
 ht <- unlist(ht)
 head(sort(table(ht), decreasing = TRUE))
 ```
