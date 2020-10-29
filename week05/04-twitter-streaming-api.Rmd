@@ -106,12 +106,13 @@ As the tweets have been parsed into R in a tabular format through the package, w
 
 ```{r}
 write_as_csv(sample_tweets, file_name = "df_collected_tweets.csv")
+# useful especially if you collect a lot of data 
 ```
 
 We could, however, also specify a JSON file name and set the parse option to false (only one of these options would be needed to obtain an output file that is not deleted, it could e.g. be named automatically by the package):
 
 ```{r}
-stream_tweets(q = "", timeout = 10, parse = FALSE, file_name = ____)
+stream_tweets(q = "", timeout = 10, parse = FALSE, file_name = "collected_tweets.json")
 ```
 
 #### 2. Filtering by keyword
@@ -127,13 +128,18 @@ head(keyword_tweets$text)
 Multiple keywords that should be contained in the tweets are separated with a capitalised `AND` (to indicate that the `and` is not a term itself). For example, let us search for the keywords trump and biden:
 
 ```{r}
-keywords_tweets <- stream_tweets(____, timeout = 5)
+keywords_tweets <- stream_tweets("trump AND biden", timeout = 5)
 head(keywords_tweets$text)
 ```
 
 #### 3. Filtering by user ids
 
 If we wanted to collect a stream of tweets from specific users, we could specify a vector of user ids and set q = user_id_vector.
+
+```{r}
+uid_tweets <- stream_tweets(q = "25073877", timeout = 5) # Trump's account ID as the search word, so all tweets that mention Donald Trump in the last 5 secs will be collected
+head(uid_tweets$text)
+```
 
 #### 4. Filtering by location
 
@@ -142,7 +148,7 @@ Lastly, let us turn to collecting tweets filtered by location instead. To be abl
 For example, imagine we want to collect tweets from the United States. One way to do it is to find two pairs of coordinates (longitude and latitude) that indicate the southwest corner AND the northeast corner. One important thing when using this function is to note the order it uses: It is not (lat, long), but (long, lat). In the case of the US, this would therefore be approx. (-125, 26) and (-65, 49) or in one vector c(-125, 26, -65, 49). How can you find coordinates? You can e.g. use Google Maps, and right-click on the desired location (e.g. the north-east corner of the US or a city) and select "What's here?". Just note that the coordinates on Google are given in opposite order. As a small exercise, what are the approximate coordinates of Detroit's center? Alternatively you can use the function `lookup_coords`, e.g.` lookup_coords("usa")`. If you would like to look up coordinates of e.g. cities with this functions you would need to supply a valid Google Maps API key as one of its arguments. Proceeding with the example of US tweets:
 
 ```{r}
-geo_tweets <- stream_tweets(q = ____, timeout = 30)
+geo_tweets <- stream_tweets(q = c(125, 26 , -65, 49), timeout = 30) # all tweets coming from the US that are geolocated
 #geo_tweets <- stream_tweets(q = lookup_coords("usa"), timeout = 30)
 ```
 
