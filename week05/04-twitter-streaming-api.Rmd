@@ -150,6 +150,7 @@ For example, imagine we want to collect tweets from the United States. One way t
 ```{r}
 geo_tweets <- stream_tweets(q = c(125, 26 , -65, 49), timeout = 30) # all tweets coming from the US that are geolocated
 #geo_tweets <- stream_tweets(q = lookup_coords("usa"), timeout = 30)
+# I got disconnected here.
 ```
 
 Where are these tweets from more precisely? We can use the **maps** package to visualise this. In the `map.where` function we can thereby e.g. use "state" as the first argument to obtain location of tweets at the state level or "world" to obtain location at the country level. To do this, however, we first need to add columns to our data frame that store the latitude and longitude of each tweet. The `lat_lng` function appends the data frame with latitude and longitude variables using available geo-location information in tweet data returned from the API. For in detail information of what types of location data can be attached to geo-tagged tweets, see e.g. this [link](https://developer.twitter.com/en/docs/twitter-api/v1/data-dictionary/overview/geo-objects)
@@ -160,7 +161,7 @@ Where are these tweets from more precisely? We can use the **maps** package to v
 geo_tweets <- lat_lng(geo_tweets)
 
 # Counting how many tweets came from different US states
-states <- map.where(database = "state", x = geo_tweets$____, y = geo_tweets$____)
+states <- map.where(database = "state", x = geo_tweets$long, y = geo_tweets$lat)
 head(sort(table(states), decreasing = TRUE))
 ```
 
@@ -178,8 +179,8 @@ ggplot(map.data) + geom_map(aes(map_id = region), map = map.data, fill = "grey90
     # Limits for x and y axis
     scale_x_continuous(limits=c(-125, -66)) + scale_y_continuous(limits = c(25, 50)) +
     # Adding the dot for each tweet and specifying dot size, transparency, and colour
-    geom_point(data = geo_tweets, aes(x = lng, y = lat), size = ____,
-               alpha = 1/5, color = ____) +
+    geom_point(data = geo_tweets, aes(x = lng, y = lat), size = 1,
+               alpha = 1/5, color = "red") +
     # Removing unnecessary graph elements
     theme(axis.line = element_blank(), 
     	axis.text = element_blank(), 
