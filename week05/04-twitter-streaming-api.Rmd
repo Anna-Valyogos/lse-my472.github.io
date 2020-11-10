@@ -30,7 +30,7 @@ authentication <- list(consumer_key = "Z5IKectiIqZcq9cJVXvJMQ5ND",
 
 A more convenient approach could be to store this list once after you have pasted your keys and then to reload it when running some code. Store the list once with:
 
-```{t}
+```{r}
 save(authentication, file = "authentication.rda")
 ```
 
