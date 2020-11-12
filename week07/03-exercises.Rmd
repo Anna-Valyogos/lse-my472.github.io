@@ -35,12 +35,17 @@ library("tidyverse")
 ```{r}
 dfm <- data_char_ukimmig2010 %>%                        # 1. study the data
   corpus() %>% 
-  tokens(___________ = TRUE, ___________ = TRUE) %>%    # 2. remove punctuation and numbers
-  tokens_remove(___________) %>%                        # 3. remove stopwords (English)
-  ___________() %>%                                     # 4. stem the tokens
+  tokens(remove_punct = TRUE, remove_numbers = TRUE) %>%    # 2. remove punctuation and numbers
+  tokens_remove(stopwords('en')) %>%                        # 3. remove stopwords (English)
+  tokens_wordstem() %>%                                     # 4. stem the tokens
   dfm() %>%
-  dfm_trim(___________)                                 # 5. minimum word frequency = 2
+  dfm_trim(min_termfreq = 2)                                 # 5. minimum word frequency = 2
 dfm
+
+# if you forget the options within a package, enter package name:: and you'll get them all there
+# "quanteda::"
+# Good idea to run chunks
+
 ```
 
 
