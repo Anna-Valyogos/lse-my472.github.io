@@ -16,13 +16,14 @@ library("tidyverse")
 Specify the directory where the txt file is stored:
 
 ```{r}
-current_dir <- "tba"
+current_dir <- "/Users/valyo/Downloads/MASTERS/MY472/lse-my472.github_all_material/week07/"
 ```
 
 Load the txt file into a character vector with `read_file`:
 
 ```{r}
-sample_text <- read_file(paste(current_dir, "sample_text.txt", sep = ""))
+sample_text <- read_file(paste(current_dir, "practice_regular_expressions.txt", sep = ""))
+
 ```
 
 Helpful functions are e.g. `str_view`, `str_view_all`, `str_extract`, `str_extract_all`. The `_all` variants process all matches in the string rather than only the first.
@@ -44,11 +45,24 @@ str_view_all(sample_text, "a|e")
 The extract function on the other hand allows to extract the matching characters. The following regular expression is one possible way to use the options we discussed this week to extract the times from the file (as the backslash is already used as an escape symbol in normal strings in R, we need to use a double backslash for regular expressions):
 
 ```{r}
+# double backward slashes:
+# To allow for characters such as \ in the regular expression
+# (e.g. \d or \w) to be understood by R, \ has to be escaped 
+# i.e. handled as a simple string character, not as a special
+# character. Therefore the first \ is the escape operation by R,
+# the sencond is part of the regular expression that we are searching
+# as a string.
+
+# regular expression we search for in Atom:
+# \d{1,2}[:.\s-]?\d{0,2}
+# for R to treat this properly we ought to escape the \ characters
+# to be treated as normal characters, so the R code becomes:
+
 str_extract(sample_text, "\\d{1,2}[:.\\s-]?\\d{0,2}")
 ```
 
 ```{r}
-str_extract_all(sample_text, "\\d{1,2}[:.\\s-]?\\d{0,2}")
+str_extract_all(sample_text, "\\d{1,2}[:.\\s-]?\\d{0,2}") # returns a list
 ```
 
 Other helpful functions are e.g. `str_detect` (particularly when all words are elements in a long character vector) and `str_count`. For a detailed discussion of strings and regular expressions in R with the `stringr` package, see http://r4ds.had.co.nz/strings.html and the vignette https://cran.r-project.org/web/packages/stringr/vignettes/regular-expressions.html.
