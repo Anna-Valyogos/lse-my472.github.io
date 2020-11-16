@@ -88,7 +88,7 @@ p + scale_x_log10(labels = comma) + scale_y_log10(labels = comma) +
 # for a complete list for each geom, type ?geom_point, ?geom_line, ...
 ```
 
-Next, let us use color within aesthetics and in combination with the post type. Rather than as a property of the geom, it now applies to specific groups (here post types) via scales  instead of to all data points (when specified in geom before).
+Next, let us use color within aesthetics and in combination with the post type. Rather than as a property of the geom, it now applies to specific groups (here post types) via scales instead of to all data points (when specified in geom before).
 
 ```{r}
 p <- ggplot(df, aes(x = likes_count, y = comments_count))
@@ -141,7 +141,7 @@ p + geom_point() + scale_x_log10(labels = comma) + scale_y_log10(labels = comma)
 Combining facets and scales:
 
 ```{r}
-p <- ggplot(df[df$likes_count>5000,], 
+p <- ggplot(df[df$likes_count > 5000,], 
             aes(x = likes_count, y = comments_count))
 p + geom_point(aes(shape = gender, color = post_type, size = shares_count)) + 
         scale_x_log10(labels = comma) + scale_y_log10(labels = comma) +
