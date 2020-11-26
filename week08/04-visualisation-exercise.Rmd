@@ -11,6 +11,8 @@ output: html_document
 library("tidyverse")
 library("plotly")
 library("scales")
+library("lubridate")
+library("ggplot2")
 ```
 
 
@@ -34,7 +36,6 @@ end <- c(start[-1], as.Date("2016-10-01"))
 party <- c("D", "R", "D", "D", "R", "R", "D", "R", "R", "D", "R", "D")
 pres <- data.frame(name, start, end, party, stringsAsFactors=F)
 
-
 ```
 
 ![](04-unemployment.png)
@@ -43,30 +44,43 @@ Your code here:
 ```{r}
 
 # Transform date column to datetime (lubridate package!)
-
-
+unemp$date <- ymd(unemp$date)
 
 # Create a line-plot with unemployment and date
-
-
-
-# Fix axes and add colored rectangles
-
+p <- ggplot(unemp, aes(x = date, y = unemp))
+p + geom_line() +
+  
+  # Fix axes and add colored rectangles
+  ylab("Unemployment Rate") +
+  # scale_x_datetime(date_breaks = c(1960, 1980, 2000))
+  # geom_rect(data = pres)
+        
 
 
 # Adding president names
+  geom_text(data = pres, mapping = aes(x = start, y = 0.10, label = name),
+            angle = 90, vjust = - 0.2, hjust = 0.25) + #wrong side of the line now
 
 
 
 # Adding lines to separate presidencies
-
+  geom_vline(data = pres, xintercept = start, linetype = 5) +
 
 
 # Finally, moving legend and removing x axis title
+  theme(
+    axis.title.x = element_blank(),
+    legend.position = "bottom") +
+  
 
 
 
 # Adjusting y axis
+  scale_y_continuous(limits = c(0, 0.12),
+                     breaks = c(0.02, 0.04),
+                     #labels = c("2%", "4%"),
+                     )
+  
 
 
 

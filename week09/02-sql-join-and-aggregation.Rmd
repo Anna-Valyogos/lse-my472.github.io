@@ -14,13 +14,14 @@ library(DBI)
 Now is where we get to see the magic of SQL. It makes it really easy to combine multiple SQL tables using __JOIN__. We just select columns from different tables and then specify what _key_ should be used to match them using __ON__. 
 
 ```{r}
-db <- dbConnect(RSQLite::SQLite(), "data/facebook-db.sqlite")
+db <- dbConnect(RSQLite::SQLite(), "facebook-data/facebook-db.sqlite")
 
 dbGetQuery(db, 
   "SELECT posts.likes_count, congress.party, posts.date
   FROM posts JOIN congress
     ON congress.screen_name = posts.screen_name
-  LIMIT 10")
+  LIMIT 10") # can we keep the column of the variable used for joining?
+
 ```
 
 Once we know how to merge tables, we can use columns from both tables. For example, let us say we want to find the most shared post by a Democrat, or by a Republican (more on this in detail in this file). Here is how we would do it:
@@ -40,6 +41,10 @@ dbGetQuery(db,
   WHERE party = 'Republican'
   ORDER BY shares_count DESC
   LIMIT 1")
+dbGetQuery(db, 
+  "SELECT congress.screen_name, posts.screen_name, posts.message, posts.shares_count, congress.party 
+  FROM posts JOIN congress
+    ON congress.screen_name = posts.screen_name")
 ```
 
 Note that `JOIN` per default performs an `INNER JOIN`, however, it can be clearer to specify the type of join as there are several (left vs right outer joins, ...). We will discuss joins in more detail in this week's class.
@@ -62,6 +67,7 @@ dbGetQuery(db,
   FROM posts
   GROUP BY from_name
   LIMIT 10")
+# order matters for the query to work
 ```
 
 We can then e..g. order the results using __ORDER BY__. The default is alphabetical order for the first column, but we can change that:

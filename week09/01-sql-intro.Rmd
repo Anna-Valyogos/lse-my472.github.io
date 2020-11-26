@@ -17,14 +17,14 @@ library(DBI)
 
 ```{r, eval=FALSE}
 # Create database: This will create a file in our hard drive if it does not exist already
-db <- dbConnect(RSQLite::SQLite(), "data/facebook-db.sqlite")
+db <- dbConnect(RSQLite::SQLite(), "facebook-data/facebook-db.sqlite")
 
 # Reading the first file into R
-congress <- read.csv("data/congress-facebook-2017.csv",
+congress <- read.csv("facebook-data/congress-facebook-2017.csv",
 	stringsAsFactors = FALSE)
 
 # Adding a first table: User-level data
-dbWriteTable(db, "congress", congress)
+dbWriteTable(db, "congress", congress, overwrite = TRUE)
 
 # Testing that it works with a simple query
 dbListFields(db, "congress")
@@ -36,7 +36,7 @@ Note that we have used `dbWriteTable` to add the data frame to our database, and
 We now switch to the second table. However, the files are too big to open them all in memory. Instead, we will open them one by one, and then __append__ them to the table. Let us see how that works...
 
 ```{r, eval=FALSE}
-fls <- list.files("data/posts", full.names = TRUE)
+fls <- list.files("facebook-data/posts", full.names = TRUE) # creates character vector of file names
 
 for (f in fls){
   
@@ -46,7 +46,7 @@ for (f in fls){
   fb <- read.csv(f, stringsAsFactors = FALSE)
   
   # Adding to table in SQL database
-  dbWriteTable(db, "posts", fb, append = TRUE)
+  dbWriteTable(db, "posts", fb, append = TRUE) # append creates table fb if it does not already exist, and appends to it if it does
   
 }
 ```
@@ -74,7 +74,7 @@ dbDisconnect(db)
 Now that we have our tables in the database, let us see how we can query them. First we connect using `dbConnect` and then we type our query with `dbGetQuery`. Generally, we will write the query __clauses__ in capital letters and the column names in lowercase.
 
 ```{r}
-db <- dbConnect(RSQLite::SQLite(), "data/facebook-db.sqlite")
+db <- dbConnect(RSQLite::SQLite(), "facebook-data/facebook-db.sqlite") # connect to existing database we have just created
 test <- dbGetQuery(db, 'SELECT * FROM congress LIMIT 5')
 str(test)
 ```
