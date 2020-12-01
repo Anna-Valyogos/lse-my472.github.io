@@ -7,3 +7,7 @@ lse-my472.github.io.Rproj
 .Rhistory
 week05/nyt.json
 week09/facebook-data/facebook-db.sqlite
+week10/facebook-data/facebook-db.sqlite
+*.csv
+week10/01-bigquery-create-own-databases.Rmd
+week10/01-bigquery-create-own-databases.Rmd
