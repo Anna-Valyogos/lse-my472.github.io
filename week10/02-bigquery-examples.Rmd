@@ -41,6 +41,7 @@ db <- dbConnect(
   billing = billing_info
 )
 db
+
 ```
 
 1. First, connect to the database and count how many rows it contains (if the code yields a Google credentials error, once copy-paste it into the R console directly which should then open the browser window for authentication):
