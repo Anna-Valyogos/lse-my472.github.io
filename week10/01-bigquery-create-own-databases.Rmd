@@ -63,5 +63,5 @@ dbGetQuery(db, "SELECT * FROM congress LIMIT 5")
 Just like last week, R Markdown also allows to run these queries directly in its code chunks, just that we now use an online database as connection:
 
 ```{sql, connection = db}
-SELECT * FROM congress LIMIT 10
+SELECT * FROM congress LIMIT 5
 ```
