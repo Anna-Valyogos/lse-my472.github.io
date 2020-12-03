@@ -190,7 +190,7 @@ dbGetQuery(db, "SELECT EXTRACT(HOUR FROM starttime) as hour_of_day,
 
 5. What is the average trip duration based on the gender of the riders?
 
-```{r}
+```{r} 
 dbGetQuery(db, "SELECT gender, AVG( TIMESTAMP_DIFF(stoptime, starttime, MINUTE) )
   AS duration_minutes, COUNT(*) as trip_count,
   FROM citibike_trips
