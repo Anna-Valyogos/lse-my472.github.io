@@ -11,7 +11,7 @@ Loading packages:
 
 ```{r}
 library("DBI")
-library("bigrquery") 
+library("bigrquery")
 ```
 
 First, we need to create a project with the BigQuery sandbox as described [here](https://cloud.google.com/bigquery/docs/sandbox) (the sandbox does not require to supply any billing information). You can type `console.cloud.google.com/bigquery` into your browser and log in with a Google account. In the following we will use this Google account with the `bigrquery` package. If you prefer not to share any personal data with the package, feel free to create a new Google account for this exercise. Once you are logged in at `console.cloud.google.com/bigquery`, first create a project and then create a dataset (i.e. a database) within your project. Afterwards enter your project ID and the dataset name here:
