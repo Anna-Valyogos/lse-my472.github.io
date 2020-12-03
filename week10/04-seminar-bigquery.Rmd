@@ -74,6 +74,4 @@ dbGetQuery(db,
            AS average_speed
            FROM citibike_trips
            GROUP BY age")
-
-# cannot open the connection?
 ```

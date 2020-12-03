@@ -13,9 +13,9 @@ Run the code below to create a SQLite database that contains a random sample of 
 ```{r, eval = F}
 library(DBI)
 # create database: this will create a file on our hard drive
-db <- dbConnect(RSQLite::SQLite(), "~/data/facebook-db-mini.sqlite")
+db <- dbConnect(RSQLite::SQLite(), "C:/Users/valyo/Downloads/MASTERS/MY472/lse-my472.github_all_material/week10/facebook-data/facebook-db-mini.sqlite")
 # reading the first file
-congress <- read.csv("~/data/congress-facebook-2017.csv",
+congress <- read.csv("C:/Users/valyo/Downloads/MASTERS/MY472/lse-my472.github_all_material/week10/facebook-data/congress-facebook-2017.csv",
 	stringsAsFactors=F)
 
 # this determines the seed in the pseudo-random number generator
@@ -34,7 +34,7 @@ dbGetQuery(db, 'SELECT * FROM congress LIMIT 5')
 
 ```{r, eval = F}
 
-fls <- list.files("~/data/posts", full.names=TRUE)
+fls <- list.files("C:/Users/valyo/Downloads/MASTERS/MY472/lse-my472.github_all_material/week10/facebook-data/posts", full.names=TRUE)
 set.seed(20191212)
 
 for (f in fls){
@@ -57,6 +57,8 @@ dbGetQuery(db, 'SELECT * FROM posts LIMIT 5')
 # and we close the connection for now
 dbDisconnect(db)
 
+# need to run for even longer
+
 ```
 
 ## Questions
@@ -64,16 +66,24 @@ dbDisconnect(db)
 ```{r}
 library(DBI)
 library(tidyverse)
-db <- dbConnect(RSQLite::SQLite(), "~/data/facebook-db-mini.sqlite")
+db <- dbConnect(RSQLite::SQLite(), "C:/Users/valyo/Downloads/MASTERS/MY472/lse-my472.github_all_material/week10/facebook-data/facebook-db-mini.sqlite")
 ```
 
 1. How many rows are there in each table?
 ```{r}
-
+dbGetQuery(db, 
+           "SELECT COUNT(*) as number_of_rows FROM congress")
+dbGetQuery(db, 
+           "SELECT COUNT(*) as number_of_rows FROM posts")
 ```
 
 2. How many rows do you get when use `JOIN` to join posts with congress? What kind of join is this? What does this tell us about the data we have?
 ```{r}
+dbGetQuery(db,
+           "SELECT ")
+
+# by default this is an inner-join
+# it tells us that xxx record overlap in the two tables
 
 ```
 
