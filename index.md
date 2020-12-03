@@ -290,14 +290,9 @@ This session will offer an introduction to relational databases: structure, logi
 This week, we will dive deeper into the databases. In particular, this week covers following topics: How to set up and use relational databases in the cloud, how to obtain big data analytics through data warehousing services (e.g. Google BigQuery), and fundamentals of noSQL databases.
 
 ##### Resources
-<<<<<<< HEAD
 - [Lecture slides](week10/my472-week10-nosql-and-cloud-db.pdf)
 - R examples: [Creating own databases in the cloud](week10/01-bigquery-create-own-databases.Rmd), [querying large cloud databases](week10/02-bigquery-examples.Rmd), [MongoDB](week10/03-mongodb-demo.Rmd)
 
-=======
-- [Lecture slides](week10/MY472-week10.pdf)
-- [Examples](https://github.com/lse-my472/lse-my472.github.io/tree/master/week10)
->>>>>>> parent of 5681131... main update week 10
 
 ##### Required reading
 * Beaulieu. 2009. [_Learning SQL_](https://books.google.co.uk/books?hl=en&lr=&id=1PgCCVryjOQC&oi=fnd&pg=PR3&dq=learning+sql+alan&ots=X6M3Iaz1wO&sig=38Fp1kDlxM8TF7miw0K2CNcKib4#v=onepage&q=learning%20sql%20alan&f=false). O'Reilly. (Chapters 2)
@@ -312,8 +307,8 @@ This week, we will dive deeper into the databases. In particular, this week cove
 - SQL JOINs, subqueries, and BigQuery
 
 ##### Assignment 5: Databases
-- Link to GitHub Classroom available via Moodle on Monday, November 30, 2pm
-- Deadline on Friday, December 11, 2pm
+- Link to GitHub Classroom available via Moodle on Wednesday, December 2
+- Deadline on Monday, December 14, 2pm
 
 
 #### 11. Cloud computing

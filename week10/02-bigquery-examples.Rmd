@@ -66,7 +66,7 @@ data_plot_1 <- dbGetQuery(db, "SELECT year, borough, SUM(value) AS count_crime
 View(data_plot_1)
 ```
 
-```{r fig.width=7, fig.height=4, echo=FALSE}
+```{r fig.width=10, fig.height=6, echo=FALSE}
 data_plot_1 %>% group_by(borough) %>%
   mutate(ratio = count_crime/count_crime[year == 2008]) %>%
 ggplot(aes(x = year, y = ratio, color = borough)) + geom_line()
@@ -76,7 +76,8 @@ ggplot(aes(x = year, y = ratio, color = borough)) + geom_line()
 
 ```{r}
 data_plot_2 <- dbGetQuery(db, "SELECT year, major_category,
-            SUM(value) AS count_crime FROM crime_by_lsoa
+            SUM(value) AS count_crime 
+            FROM crime_by_lsoa
             GROUP BY year, major_category")
 #View(data_plot_2)
 ```
@@ -98,7 +99,7 @@ crime_per_lsoa_code
 ```{r}
 
 # Download the shape file from: https://data.london.gov.uk/dataset/statistical-gis-boundary-files-london
-shp <- readOGR(dsn = "~/Downloads/statistical-gis-boundaries-london/ESRI/LSOA_2011_London_gen_MHW.shp",
+shp <- readOGR(dsn = "C:/Users/valyo/Downloads/MASTERS/MY472/lse-my472.github_all_material/week10/statistical-gis-boundaries-london/ESRI/LSOA_2011_London_gen_MHW.shp",
                stringsAsFactors = FALSE)
 
 # Obtaining longitude and latitude (contains an ID column, but starting at zero!)
