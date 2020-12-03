@@ -11,3 +11,4 @@ week10/facebook-data/facebook-db.sqlite
 *.csv
 week10/01-bigquery-create-own-databases.Rmd
 week10/01-bigquery-create-own-databases.Rmd
+*.dbf
