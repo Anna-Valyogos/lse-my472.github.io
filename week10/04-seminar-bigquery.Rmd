@@ -56,11 +56,12 @@ dbGetQuery(db, "SELECT (EXTRACT(YEAR FROM CURRENT_TIMESTAMP) - birth_year) AS ag
 
 ```{r}
 dbGetQuery(db,
-           "SELECT AVG( (ABS(start_station_latitude - end_station_latitude)
-           + ABS(start_station_longitude - end_station_longitude)) * 111 / tripduration )
-           AS average_speed
+           "SELECT AVG( ((ABS(start_station_latitude - end_station_latitude)
+           + ABS(start_station_longitude - end_station_longitude)) * 111) / 
+           tripduration) AS average_speed
            FROM citibike_trips")
 
+# Wrong solution? - why?
 ```
 
 5. What is the average speed based on age?
@@ -71,8 +72,8 @@ dbGetQuery(db,
            AVG( (ABS(start_station_latitude - end_station_latitude)
            + ABS(start_station_longitude - end_station_longitude)) * 111 / tripduration )
            AS average_speed
-           FROM citibike_trips,
+           FROM citibike_trips
            GROUP BY age")
 
-
+# cannot open the connection?
 ```
