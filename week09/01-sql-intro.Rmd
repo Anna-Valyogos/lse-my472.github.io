@@ -24,6 +24,11 @@ congress <- read.csv("facebook-data/congress-facebook-2017.csv",
 	stringsAsFactors = FALSE)
 
 # Adding a first table: User-level data
+
+# Remove previous tables first
+dbRemoveTable(db, "congress")
+dbRemoveTable(db, "posts")
+
 dbWriteTable(db, "congress", congress, overwrite = TRUE)
 
 # Testing that it works with a simple query

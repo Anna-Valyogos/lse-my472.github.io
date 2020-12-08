@@ -7,7 +7,8 @@ Practice creating a SQL database and querying it. You should use the data in the
 ```{r}
 library(DBI)
 
-database <- dbConnect(RSQLite::SQLite(), "UK-tweets-db.sqlite")
+database <- dbConnect(RSQLite::SQLite(), "facebook-data/UK-tweets-db.sqlite")
+# dbRemoveTable(database, "tweets")
 tweets <- read.csv("UK-tweets.csv", stringsAsFactors = FALSE)
 dbWriteTable(database, "tweets", tweets, overwrite = TRUE)
 dbListFields(database, "tweets")
@@ -18,7 +19,7 @@ dbGetQuery(database, "SELECT * FROM tweets LIMIT 5")
 
 ```{r}
 #dbGetQuery(database, )
-
+dbDisconnect(database)
 ```
 
 ```{sql, connection=database}
