@@ -73,7 +73,7 @@ dbGetQuery(db,
               ON congress.screen_name = posts.screen_name
            WHERE congress.party = 'Republican'
            GROUP BY posts.domain
-           ORDER BY total_sad_reactions
+           ORDER BY total_sad_reactions DESC
            LIMIT 10")
 
 dbGetQuery(db, 
@@ -83,16 +83,8 @@ dbGetQuery(db,
               ON congress.screen_name = posts.screen_name
            WHERE congress.party = 'Democrat'
            GROUP BY posts.domain
-           ORDER BY total_sad_reactions
+           ORDER BY total_sad_reactions DESC
            LIMIT 10")
-
-
-
-
-dbGetQuery(db,
-           "SELECT * FROM posts") # to take a look at posts table
-dbGetQuery(db,
-           "SELECT * FROM congress")
 ```
 
 
