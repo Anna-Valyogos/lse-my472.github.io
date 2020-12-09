@@ -6,10 +6,10 @@ Practice creating a SQL database and querying it. You should use the data in the
 
 ```{r}
 library(DBI)
-db <- dbConnect(RSQLite::SQLite(), "data/tweet-db.sqlite")
+db <- dbConnect(RSQLite::SQLite(), "facebook-data/tweet-db-solution.sqlite")
 
 tweets <- read.csv("UK-tweets.csv")
-dbWriteTable(db, "tweets", tweets)
+dbWriteTable(db, "tweets", tweets, overwrite = TRUE)
 
 dbListFields(db, "tweets")
 dbGetQuery(db, 'SELECT * FROM tweets LIMIT 5')
@@ -51,5 +51,9 @@ dbGetQuery(db,
     AS avg_followers 
     FROM tweets
     GROUP BY polite")
+```
+
+```{r}
+dbDisconnect(db)
 ```
 

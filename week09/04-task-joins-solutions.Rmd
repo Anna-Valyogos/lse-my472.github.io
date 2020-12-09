@@ -6,7 +6,7 @@ Practice writing using **JOIN** in SQL queries to answer the questions below. Us
 
 ```{r}
 library(DBI)
-db <- dbConnect(RSQLite::SQLite(), "data/facebook-db.sqlite")
+db <- dbConnect(RSQLite::SQLite(), "facebook-data/facebook-db.sqlite")
 
 dbGetQuery(db, 
            "SELECT SUBSTR(date, 1, 7) as MONTH , 

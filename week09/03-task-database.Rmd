@@ -19,7 +19,7 @@ dbGetQuery(database, "SELECT * FROM tweets LIMIT 5")
 
 ```{r}
 #dbGetQuery(database, )
-dbDisconnect(database)
+#dbDisconnect(database)
 ```
 
 ```{sql, connection=database}
@@ -37,8 +37,14 @@ FROM tweets
 3. What perecent of tweets are classified as impolite?
 
 ```{sql, connection=database}
-SELECT 100.0*SUM(CASE WHEN polite = "impolite" THEN 1 ELSE NULL END)/COUNT(*) AS impolite_perc
+SELECT 100.0*SUM(CASE WHEN polite = "impolite" THEN 1 ELSE 0 END)/COUNT(*) AS impolite_perc
 FROM tweets
+```
+```{r} 
+# Alternaive solution, a bit funny
+dbGetQuery(database, 
+           "SELECT 100.0*SUM(CASE WHEN polite LIKE '%im%' THEN 1 ELSE NULL END)/COUNT(*) AS Brexit_perc
+           FROM tweets")
 ```
 
 
@@ -48,15 +54,19 @@ FROM tweets
 ```{sql, connection=database}
 SELECT 100.0*SUM(CASE WHEN text LIKE '%Brexit%' THEN 1 ELSE NULL END)/COUNT(*) AS brexit_perc
 FROM tweets
-
-SELECT 100.0*SUM(CASE WHEN polite LIKE '%im%' THEN 1 ELSE NULL END)/COUNT(*) AS Brexit_perc
-FROM tweets
 ```
 
 
 5. Compute the average number of followers for tweets that are impolite and polite.
 
-```{r}
+```{sql, connection = database}
+SELECT polite, AVG(followers_count) AS average_followers
+FROM tweets
+GROUP BY polite
 
 ```
 
+
+```{r}
+dbDisconnect(db)
+```
