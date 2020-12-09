@@ -6,44 +6,94 @@ Practice writing SQL queries that answer the following questions using the datab
 
 ```{r}
 library(DBI)
-db <- dbConnect(RSQLite::SQLite(), "data/facebook-db.sqlite")
+db <- dbConnect(RSQLite::SQLite(), "facebook-data/facebook-db.sqlite")
+
+# save tables so that I can have a look at them
+dbListTables(db)
+congress_tab <- dbGetQuery(db, "SELECT * FROM congress")
+posts_tab <- dbGetQuery(db, "SELECT * FROM posts")
 
 dbGetQuery(db, 
-           "SELECT screen_name, message
-           ...")
+           "SELECT screen_name, from_name, message, MAX(shares_count)
+           FROM posts")
+
+dbGetQuery(db,
+           "SELECT screen_name, from_name, message, shares_count
+           FROM posts
+           ORDER BY shares_count DESC
+           LIMIT 1")
 
 ```
 
 2. What about the post with the most comments?
 
 ```{r}
-
-
+dbGetQuery(db,
+           "SELECT screen_name, from_name, message, shares_count
+           FROM posts
+           ORDER BY comments_count DESC
+           LIMIT 1")
 ```
 
 3. Which was the post that received the most likes in January of 2017?
 
 ```{r}
-
+dbGetQuery(db,
+           "SELECT screen_name, message, likes_count, id
+           FROM posts
+           WHERE date LIKE '2017-01%'
+           ORDER BY likes_count DESC
+           LIMIT 1")
 
 ```
 
 4. What was the photo posted by a Member of Congress that received the most "angry" reactions?
 
 ```{r}
+dbGetQuery(db, 
+           "SELECT posts.screen_name, message, posts.from_name, posts.type, posts.id, congress.type, angry_count
+           FROM posts JOIN congress
+              ON congress.screen_name = posts.screen_name
+           WHERE posts.type = 'photo'
+           ORDER BY angry_count DESC
+           LIMIT 1")
 
 ```
 
 5. What was the post by `senatorsanders` that received the most "angry" reactions? And the most "love" reactions?
 
 ```{r}
+dbGetQuery(db,
+           "SELECT screen_name, message, type, angry_count, id
+           FROM posts
+           WHERE screen_name = 'senatorsanders'
+           ORDER BY angry_count DESC
+           LIMIT 1")
 
+dbGetQuery(db,
+           "SELECT screen_name, message, type, love_count, id
+           FROM posts
+           WHERE screen_name = 'senatorsanders'
+           ORDER BY love_count DESC
+           LIMIT 1")
 ```
 
 6. Which was the post mentioning "Trump" that was shared the most? And which was the post that received the most "love" reactions?
 
 ```{r}
+dbGetQuery(db,
+           "SELECT screen_name, message, type, shares_count, id
+           FROM posts
+           WHERE message LIKE '%Trump%'
+           ORDER BY shares_count DESC
+           LIMIT 1")
 
+dbGetQuery(db, 
+           "SELECT screen_name, message, love_count, id
+           FROM posts
+           WHERE message LIKE '%trump%'
+           ORDER BY love_count DESC
+           LIMIT 1")
 ```
 
 
