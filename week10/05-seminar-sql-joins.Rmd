@@ -11,11 +11,13 @@ For your reference, the figure below shows different types of joins and how to r
 Run the code below to create a SQLite database that contains a random sample of the Facebook data we used in week 10.
 
 ```{r, eval = F}
+
+getwd()
 library(DBI)
 # create database: this will create a file on our hard drive
-db <- dbConnect(RSQLite::SQLite(), "C:/Users/valyo/Downloads/MASTERS/MY472/lse-my472.github_all_material/week10/facebook-data/facebook-db-mini.sqlite")
+db <- dbConnect(RSQLite::SQLite(), "./facebook-data/facebook-db-mini.sqlite")
 # reading the first file
-congress <- read.csv("C:/Users/valyo/Downloads/MASTERS/MY472/lse-my472.github_all_material/week10/facebook-data/congress-facebook-2017.csv",
+congress <- read.csv("./facebook-data/congress-facebook-2017.csv",
 	stringsAsFactors=F)
 
 # this determines the seed in the pseudo-random number generator
@@ -25,7 +27,7 @@ set.seed(20191212)
 # sample 100 rows randomly
 congress <- congress[sample(nrow(congress), 100), ]
 # adding first table: user-level data
-dbWriteTable(db, "congress", congress)
+dbWriteTable(db, "congress", congress, overwrite = TRUE)
 # testing that it works with a simple query
 dbListFields(db, "congress")
 dbGetQuery(db, 'SELECT * FROM congress LIMIT 5')
@@ -34,7 +36,7 @@ dbGetQuery(db, 'SELECT * FROM congress LIMIT 5')
 
 ```{r, eval = F}
 
-fls <- list.files("C:/Users/valyo/Downloads/MASTERS/MY472/lse-my472.github_all_material/week10/facebook-data/posts", full.names=TRUE)
+fls <- list.files("./facebook-data/posts", full.names=TRUE)
 set.seed(20191212)
 
 for (f in fls){
@@ -66,11 +68,12 @@ dbDisconnect(db)
 ```{r}
 library(DBI)
 library(tidyverse)
-db <- dbConnect(RSQLite::SQLite(), "C:/Users/valyo/Downloads/MASTERS/MY472/lse-my472.github_all_material/week10/facebook-data/facebook-db-mini.sqlite")
+db <- dbConnect(RSQLite::SQLite(), "./facebook-data/facebook-db-mini.sqlite")
 ```
 
 1. How many rows are there in each table?
 ```{r}
+dbListTables(db)
 dbGetQuery(db, 
            "SELECT COUNT(*) as number_of_rows FROM congress")
 dbGetQuery(db, 
@@ -80,7 +83,9 @@ dbGetQuery(db,
 2. How many rows do you get when use `JOIN` to join posts with congress? What kind of join is this? What does this tell us about the data we have?
 ```{r}
 dbGetQuery(db,
-           "SELECT ")
+           "SELECT COUNT(*)
+           FROM posts AS p JOIN congress AS c
+              ON p.screen_name = c.screen_name")
 
 # by default this is an inner-join
 # it tells us that xxx record overlap in the two tables
@@ -89,17 +94,59 @@ dbGetQuery(db,
 
 3. How many members of congress do not have any posts?
 ```{r}
-
+# left exclusive join for congress
+# (congress is left, posts are right, and intersection is not included)
+dbGetQuery(db,
+           "SELECT COUNT(*)
+           FROM congress LEFT JOIN posts
+              ON congress.screen_name = posts.screen_name
+           WHERE posts.screen_name IS NULL")
 ```
 
 4. How many authors of posts cannot be matched to the members of congress we have in the database?
 ```{r}
+# right exclusive join
+# congress left, posts right
+dbGetQuery(db,
+           "SELECT COUNT(DISTINCT posts.screen_name)
+           FROM congress RIGHT JOIN posts
+              ON congress.screen_name = posts.screen_name
+           WHERE congress.screen_name IS NULL")
+# RIGHT JOIN not supported, so need to rewrite the query
 
+dbGetQuery(db,
+           "SELECT COUNT(DISTINCT posts.screen_name)
+           FROM posts LEFT JOIN congress
+              ON posts.screen_name = congress.screen_name
+           WHERE congress.screen_name IS NULL")
 ```
 
 5. What would you do to create a table that is equivalent to the result of a FULL OUTER JOIN? Hint: look up UNION ALL.
 ```{r}
+dbGetQuery(db,
+           "SELECT congress.*, posts.* 
+           FROM congress LEFT JOIN posts
+              ON congress.screen_name = posts.screen_name
+           WHERE posts.screen_name IS NULL
+           UNION ALL
+           SELECT congress.*, posts.* 
+           FROM posts LEFT JOIN congress
+              ON congress.screen_name = posts.screen_name
+           WHERE congress.screen_name IS NULL")
 
+# Martin's solution
+dbGetQuery(db, 
+  "SELECT c.*, p.* FROM posts AS p
+  LEFT JOIN congress AS c
+  ON c.screen_name = p.screen_name
+  UNION ALL
+  SELECT c.*, p.* FROM congress AS c
+  LEFT JOIN posts AS p
+  ON c.screen_name = p.screen_name
+  WHERE p.screen_name IS NULL
+")
+
+# not the same
 ```
 
 ```{R}

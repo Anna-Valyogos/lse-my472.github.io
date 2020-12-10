@@ -34,22 +34,27 @@ dbGetQuery(db, "SELECT birth_year, AVG( TIMESTAMP_DIFF(stoptime, starttime, MINU
           GROUP BY birth_year
           ORDER BY birth_year")
 
-dbGetQuery(db, "SELECT (EXTRACT(YEAR FROM CURRENT_TIMESTAMP) - birth_year) AS age,
-          AVG( TIMESTAMP_DIFF(stoptime, starttime, MINUTE) )
-          AS duration_minutes
+res <- dbGetQuery(db, "SELECT (2020-birth_year) AS age,
+          AVG( TIMESTAMP_DIFF(stoptime, starttime, MINUTE )) AS duration_minutes,
+          COUNT(*) AS trip_count
           FROM citibike_trips
           GROUP BY age
-          ORDER BY age DESC")
+          ORDER BY age")
+plot(res$age[res$age < 100], res$duration_minutes[res$age < 100], type = 'l')
+barplot(res$trip_count[!is.na(res$age) & res$age<100], 
+        names.arg=res$age[!is.na(res$age) & res$age<100])
 ```
 
 3. What is the average distance of a CitiBike trip based on the age of the riders?
 
 ```{r}
-dbGetQuery(db, "SELECT (EXTRACT(YEAR FROM CURRENT_TIMESTAMP) - birth_year) AS age,
+res <- dbGetQuery(db, "SELECT (EXTRACT(YEAR FROM CURRENT_TIMESTAMP) - birth_year) AS age,
            AVG( (ABS(start_station_latitude - end_station_latitude)
            + ABS(start_station_longitude - end_station_longitude)) * 111) AS average_distance,
            FROM citibike_trips
-           GROUP BY age")
+           GROUP BY age
+           ORDER BY age")
+plot(res$age[res$age < 100], res$average_distance[res$age < 100], type ='l' )
 ```
 
 4. What is the average speed of a CitiBike trip?
@@ -61,7 +66,12 @@ dbGetQuery(db,
            tripduration) AS average_speed
            FROM citibike_trips")
 
-# Wrong solution? - why?
+query_exec(
+  "SELECT AVG(((ABS(start_station_latitude-end_station_latitude) + 
+        ABS(start_station_longitude-end_station_longitude)) * 111) /
+        ((stoptime-starttime)/1000000/3600) ) AS avg_speed_km_h
+  FROM [bigquery-public-data:new_york.citibike_trips]",
+  project = "my472-week-10-lecture") # own project, because no create right for public data
 ```
 
 5. What is the average speed based on age?
@@ -74,4 +84,18 @@ dbGetQuery(db,
            AS average_speed
            FROM citibike_trips
            GROUP BY age")
+
+res <- query_exec(
+        "SELECT (2020 - birth_year) AS age,
+            AVG(((ABS(start_station_latitude-end_station_latitude) + 
+            ABS(start_station_longitude-end_station_longitude)) * 111) /
+            ((stoptime-starttime)/1000000/3600) ) AS avg_speed_km_h
+        FROM [bigquery-public-data:new_york.citibike_trips]
+        GROUP BY age
+        ORDER BY age",
+        project = "my472-week-10-lecture")
+
+plot(res$age[res$age < 100], res$avg_speed_km_h[res$age < 100], type = 'l',
+     xlab = 'rider age', ylab = 'average speed in km/h' )
+
 ```

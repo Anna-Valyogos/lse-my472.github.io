@@ -13,9 +13,10 @@ Run the code below to create a SQLite database that contains a random sample of 
 ```{r, eval = F}
 library(DBI)
 # create database: this will create a file on our hard drive
-db <- dbConnect(RSQLite::SQLite(), "~/data/my472/facebook-db-mini.sqlite")
+db <- dbConnect(RSQLite::SQLite(), "C:/Users/valyo/Downloads/MASTERS/MY472/lse-my472.github_all_material/week10/facebook-data/facebook-db-mini_solution.sqlite")
+
 # reading the first file
-congress <- read.csv("~/data/my472/congress-facebook-2017.csv",
+congress <- read.csv("C:/Users/valyo/Downloads/MASTERS/MY472/lse-my472.github_all_material/week10/facebook-data/congress-facebook-2017.csv",
 	stringsAsFactors=F)
 
 # this determines the seed in the pseudo-random number generator
@@ -34,7 +35,7 @@ dbGetQuery(db, 'SELECT * FROM congress LIMIT 5')
 
 ```{r, eval = F}
 
-fls <- list.files("~/data/my472/posts", full.names=TRUE)
+fls <- list.files("C:/Users/valyo/Downloads/MASTERS/MY472/lse-my472.github_all_material/week10/facebook-data/posts", full.names=TRUE)
 set.seed(20191212)
 
 for (f in fls){
@@ -63,7 +64,7 @@ dbDisconnect(db)
 
 ```{r}
 library(DBI)
-db <- dbConnect(RSQLite::SQLite(), "~/data/my472/facebook-db-mini.sqlite")
+db <- dbConnect(RSQLite::SQLite(),"C:/Users/valyo/Downloads/MASTERS/MY472/lse-my472.github_all_material/week10/facebook-data/facebook-db-mini_solution.sqlite")
 ```
 
 1. How many rows are there in each table?

@@ -11,36 +11,102 @@ In SQL, you can run a nested query where you use a result from the first query a
 
 ```{r}
 # load required libraries and connect to facebook-db.sqlite
+library('DBI')
 
+db <- dbConnect(RSQLite::SQLite(), "./facebook-data/facebook-db.sqlite")
+dbListTables(db) # check if it worked
 ```
 
 1. What are the screen names of the top 3 posters?
 ```{r}
+dbGetQuery(db,
+           "SELECT screen_name, COUNT(*) AS num_of_posts
+           FROM posts
+           GROUP BY screen_name
+           ORDER BY num_of_posts DESC
+           LIMIT 3")
+
+dbGetQuery(db, 
+  "SELECT screen_name
+  FROM posts
+  GROUP BY screen_name
+  ORDER BY COUNT(*) DESC
+  LIMIT 3
+")
 
 ```
 
 2. (Without subquery) how can you get the posts from these congress members?
 ```{r}
+dbGetQuery(db,
+           "SELECT *
+           FROM posts
+           WHERE screen_name IN ('CongressmanNadler', 'HurdOnTheHill', 'RepMikeThompson')")
 
+# make this into data table
+library(DT)
+dbGetQuery(db,
+           "SELECT *
+           FROM posts
+           WHERE screen_name IN ('CongressmanNadler', 'HurdOnTheHill', 'RepMikeThompson')") %>% datatable()
 ```
 
 3. Now, instead of hardcoding the screen_names in the conditional statement, use the query results in #1 as the subquery. 
 ```{r}
-
+dbGetQuery(db,
+           "SELECT *
+           FROM posts
+           WHERE screen_name IN (SELECT screen_name
+                                 FROM posts
+                                 GROUP BY screen_name
+                                 ORDER BY COUNT(*) DESC
+                                 LIMIT 3)
+           ") %>% 
+  datatable()
 ```
 
 4. Using a subquery, get the average number of likes per post for all women Democrats.
 ```{r}
-
+dbGetQuery(db,
+           "SELECT AVG(likes_count) 
+           FROM posts 
+           WHERE screen_name IN (SELECT screen_name
+                                 FROM congress
+                                 WHERE gender = 'F' and party = 'Democrat')
+           ")
 ```
 
 5. Now use a join to do the same as in #4.
 ```{r}
+dbGetQuery(db,
+           "SELECT AVG(likes_count)
+           FROM posts JOIN congress
+              ON posts.screen_name = congress.screen_name
+           WHERE congress.gender = 'F' AND congress.party = 'Democrat'")
+
 
 ```
 
 6. Which solution is faster: the one in #4 or #5?
 
 ```{r}
+library(microbenchmark)
+microbenchmark(
+  subquery = dbGetQuery(db, 
+    "SELECT AVG(likes_count)
+    FROM posts
+    WHERE screen_name IN (SELECT screen_name
+        FROM congress
+        WHERE party = 'Democrat' AND gender = 'F')
+  "),
+  join = dbGetQuery(db, 
+    "SELECT AVG(likes_count)
+    FROM posts AS p
+    JOIN congress AS c 
+    ON p.screen_name = c.screen_name
+    WHERE c.party = 'Democrat' AND c.gender = 'F'
+  "), 
+  times = 10
+)
 
 ```

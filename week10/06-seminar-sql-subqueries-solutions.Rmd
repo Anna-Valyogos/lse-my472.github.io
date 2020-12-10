@@ -12,7 +12,7 @@ In SQL, you can run a nested query where you use a result from the first query a
 ```{r}
 # load required libraries and connect to facebook-db.sqlite
 library(DBI)
-db <- dbConnect(RSQLite::SQLite(), "~/data/my472/facebook-db.sqlite")
+db <- dbConnect(RSQLite::SQLite(), "./facebook-data/facebook-db.sqlite")
 ```
 
 1. What are the screen names of the top 3 posters?

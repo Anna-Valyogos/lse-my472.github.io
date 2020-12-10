@@ -11,7 +11,7 @@ We will use the NYC Bicycle Hire data we looked at in lecture. The database cont
 
 ```{r}
 library(bigrquery)
-project <- "mblukac-my472"
+project <- "my472-week-10-lecture"
 
 query_exec(
   "SELECT *

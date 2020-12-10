@@ -168,6 +168,14 @@ dbGetQuery(db, "SELECT start_station_name, COUNT(*) AS count_start
   GROUP BY start_station_name
   ORDER BY count_start DESC
   LIMIT 10")
+
+
+dbGetQuery(db, 
+           "SELECT start_station_name, COUNT(*) AS number_of_trips
+           FROM citibike_trips
+           GROUP BY start_station_name
+           ORDER BY number_of_trips DESC
+           LIMIT 10")
 ```
 
 3. What is the average trip duration of a CitiBike trip in NYC? For advanced keywords like these, see the detailed [documentation](https://cloud.google.com/bigquery/docs/reference/standard-sql/timestamp_functions).
